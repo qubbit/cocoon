@@ -39,6 +39,9 @@
 
   $(document).on('click', '.add_fields', function(e) {
     e.preventDefault();
+
+    var extra_info = arguments.slice(1);
+
     var $this                 = $(this),
         assoc                 = $this.data('association'),
         assocs                = $this.data('associations'),
@@ -85,7 +88,7 @@
       var contentNode = $(node);
 
       var before_insert = jQuery.Event('cocoon:before-insert');
-      insertionNodeElem.trigger(before_insert, [contentNode]);
+      insertionNodeElem.trigger(before_insert, [contentNode, extra_info]);
 
       if (!before_insert.isDefaultPrevented()) {
         // allow any of the jquery dom manipulation methods (after, before, append, prepend, etc)
@@ -93,7 +96,7 @@
         // code and doesn't force it to be a sibling like after/before does. default: 'before'
         var addedContent = insertionNodeElem[insertionMethod](contentNode);
 
-        insertionNodeElem.trigger('cocoon:after-insert', [contentNode]);
+        insertionNodeElem.trigger('cocoon:after-insert', [contentNode, extra_info]);
       }
     });
   });
@@ -108,7 +111,7 @@
     e.stopPropagation();
 
     var before_remove = jQuery.Event('cocoon:before-remove');
-    trigger_node.trigger(before_remove, [node_to_delete]);
+    trigger_node.trigger(before_remove, [node_to_delete, extra_info]);
 
     if (!before_remove.isDefaultPrevented()) {
       var timeout = trigger_node.data('remove-timeout') || 0;
@@ -120,7 +123,7 @@
             $this.prev("input[type=hidden]").val("1");
             node_to_delete.hide();
         }
-        trigger_node.trigger('cocoon:after-remove', [node_to_delete]);
+        trigger_node.trigger('cocoon:after-remove', [node_to_delete, extra_info]);
       }, timeout);
     }
   });
