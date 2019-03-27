@@ -40,7 +40,7 @@
   $(document).on('click', '.add_fields', function(e) {
     e.preventDefault();
 
-    var extra_info = arguments.slice(1);
+    var extra_info = [].slice.call(arguments, 1);
 
     var $this                 = $(this),
         assoc                 = $this.data('association'),
@@ -109,6 +109,9 @@
 
     e.preventDefault();
     e.stopPropagation();
+
+    var extra_info = [].slice.call(arguments, 1);
+
 
     var before_remove = jQuery.Event('cocoon:before-remove');
     trigger_node.trigger(before_remove, [node_to_delete, extra_info]);
